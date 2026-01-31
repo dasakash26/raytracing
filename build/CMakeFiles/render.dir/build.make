@@ -76,15 +76,15 @@ CMakeFiles/render.dir/src/main.cpp.o: CMakeFiles/render.dir/flags.make
 CMakeFiles/render.dir/src/main.cpp.o: /Users/akashdas/Developer/2_projects/raytracing/src/main.cpp
 CMakeFiles/render.dir/src/main.cpp.o: CMakeFiles/render.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/akashdas/Developer/2_projects/raytracing/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/render.dir/src/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/render.dir/src/main.cpp.o -MF CMakeFiles/render.dir/src/main.cpp.o.d -o CMakeFiles/render.dir/src/main.cpp.o -c /Users/akashdas/Developer/2_projects/raytracing/src/main.cpp
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/render.dir/src/main.cpp.o -MF CMakeFiles/render.dir/src/main.cpp.o.d -o CMakeFiles/render.dir/src/main.cpp.o -c /Users/akashdas/Developer/2_projects/raytracing/src/main.cpp
 
 CMakeFiles/render.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/render.dir/src/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/akashdas/Developer/2_projects/raytracing/src/main.cpp > CMakeFiles/render.dir/src/main.cpp.i
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/akashdas/Developer/2_projects/raytracing/src/main.cpp > CMakeFiles/render.dir/src/main.cpp.i
 
 CMakeFiles/render.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/render.dir/src/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/akashdas/Developer/2_projects/raytracing/src/main.cpp -o CMakeFiles/render.dir/src/main.cpp.s
+	/opt/homebrew/opt/llvm/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/akashdas/Developer/2_projects/raytracing/src/main.cpp -o CMakeFiles/render.dir/src/main.cpp.s
 
 # Object files for target render
 render_OBJECTS = \
