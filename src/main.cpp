@@ -5,7 +5,21 @@
 
 using namespace std;
 
+bool hit_sphere(const Point3 &center, double radius, const Ray &r) {
+  Vec3 oc = center - r.origin();
+  auto d = r.direction();
+  auto a = dot(d, d);
+  auto b = -2.0 * dot(d, oc);
+  auto c = dot(oc, oc) - radius * radius;
+
+  auto discriminant = b * b - 4 * a * c;
+  return discriminant >= 0;
+}
+
 Color ray_color(const Ray &r) {
+  if (hit_sphere(Point3(0, 0, -1), 0.6, r))
+    return Color(1, 1, 0);
+
   Vec3 u_dir = unit_vec(r.direction());
   auto a = (u_dir.y() + 1.0) * 0.5;
   // LERP
