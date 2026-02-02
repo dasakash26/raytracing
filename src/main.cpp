@@ -1,24 +1,33 @@
 #include "color.h"
 #include "ray.h"
 #include "vec3.h"
+#include <cmath>
 #include <iostream>
 
 using namespace std;
 
-bool hit_sphere(const Point3 &center, double radius, const Ray &r) {
+// returns t -> distance param, at which the ray hits
+double hit_sphere(const Point3 &center, double radius, const Ray &r) {
   Vec3 oc = center - r.origin();
-  auto d = r.direction();
-  auto a = dot(d, d);
-  auto b = -2.0 * dot(d, oc);
-  auto c = dot(oc, oc) - radius * radius;
+  auto a = r.direction().mod_sq();
+  // auto b = -2.0 * dot(r.direction(), oc);
+  auto h = dot(r.direction(), oc);
+  auto c = oc.mod_sq() - radius * radius;
 
-  auto discriminant = b * b - 4 * a * c;
-  return discriminant >= 0;
+  auto discriminant = h * h - a * c;
+
+  return (discriminant < 0) ? -1.0 : (h - std::sqrt(discriminant)) / a;
 }
 
 Color ray_color(const Ray &r) {
-  if (hit_sphere(Point3(0, 0, -1), 0.6, r))
-    return Color(1, 1, 0);
+  Point3 center(0, 0, -1);
+  auto t = hit_sphere(center, 0.6, r);
+
+  if (t > 0.0) {
+    Vec3 N = unit_vec(r.at(t) - center);
+    // Color on the basis of surface normal unit vector
+    return Color(N.z() + 1, N.y() + 1, N.x() + 1) * 0.5;
+  }
 
   Vec3 u_dir = unit_vec(r.direction());
   auto a = (u_dir.y() + 1.0) * 0.5;
