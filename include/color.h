@@ -2,7 +2,6 @@
 #define COLOR_H
 
 #include "vec3.h"
-#include <ostream>
 
 #define CLAMP 255.999
 

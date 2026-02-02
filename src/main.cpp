@@ -1,42 +1,26 @@
+#include "raytracing.h"
+
 #include "color.h"
+#include "hittable.h"
+#include "hittable_list.h"
 #include "ray.h"
+#include "sphere.h"
 #include "vec3.h"
-#include <cmath>
-#include <iostream>
 
-using namespace std;
-
-// returns t -> distance param, at which the ray hits
-double hit_sphere(const Point3 &center, double radius, const Ray &r) {
-  Vec3 oc = center - r.origin();
-  auto a = r.direction().mod_sq();
-  // auto b = -2.0 * dot(r.direction(), oc);
-  auto h = dot(r.direction(), oc);
-  auto c = oc.mod_sq() - radius * radius;
-
-  auto discriminant = h * h - a * c;
-
-  return (discriminant < 0) ? -1.0 : (h - std::sqrt(discriminant)) / a;
-}
-
-Color ray_color(const Ray &r) {
-  Point3 center(0, 0, -1);
-  auto t = hit_sphere(center, 0.6, r);
-
-  if (t > 0.0) {
-    Vec3 N = unit_vec(r.at(t) - center);
-    // Color on the basis of surface normal unit vector
-    return Color(N.z() + 1, N.y() + 1, N.x() + 1) * 0.5;
+Color ray_color(const Ray &r, const Hittable &world) {
+  HitRecord rec;
+  if (world.hit(r, 0.001, infinity, rec)) {
+    return (rec.normal + Color(1, 1, 1)) * 0.5;
   }
 
-  Vec3 u_dir = unit_vec(r.direction());
-  auto a = (u_dir.y() + 1.0) * 0.5;
-  // LERP
-  auto res = (1.0 - a) * Color(1.0, 1.0, 1.0) + a * Color(0.5, 0.7, 1.0);
-  return res;
+  Vec3 unit_dir = unit_vec(r.direction());
+  auto t = 0.5 * (unit_dir.y() + 1.0);
+  return (1.0 - t) * Color(1.0, 1.0, 1.0) + t * Color(0.5, 0.7, 1.0);
 }
 
 int main() {
+  using std::clog;
+  using std::cout;
 
   // Img
   auto aspect_ratio = 2.0;
@@ -44,9 +28,17 @@ int main() {
   int img_h = int(img_w / aspect_ratio);
   img_h = (img_h) ? img_h : 1; // atleast 1
 
+  // world
+  HittableList world;
+
+  world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.3));
+  world.add(make_shared<Sphere>(Point3(0.5, 0, -1), 0.3));
+  world.add(make_shared<Sphere>(Point3(0.25, 0.7, -1), 0.4));
+  world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
+
   // Camera
   auto focal_len = 1.0;
-  auto vh = 2.0;
+  auto vh = 5.0;
   auto vw = (double(img_w) / img_h) * vh; // real ar * vh
   auto camera_center = Point3(0, 0, 0);
 
@@ -65,14 +57,14 @@ int main() {
   cout << "P3\n" << img_w << ' ' << img_h << "\n255\n";
 
   for (int j = 0; j < img_h; ++j) {
-    clog << "\r>> Scanlines remaining: " << img_h - j - 1 << ' ' << flush;
+    clog << "\r>> Scanlines remaining: " << img_h - j - 1 << ' ' << std::flush;
     for (int i = 0; i < img_w; ++i) {
       auto px_ij = px_00 + i * px_du + j * px_dv;
       auto ray_dir = px_ij - camera_center;
 
       Ray r(camera_center, ray_dir);
 
-      Color px_clr = ray_color(r);
+      Color px_clr = ray_color(r, world);
       write_color(cout, px_clr);
     }
   }
