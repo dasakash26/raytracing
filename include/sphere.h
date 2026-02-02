@@ -2,7 +2,9 @@
 #define SPHERE_H
 
 #include "hittable.h"
+#include "interval.h"
 #include "ray.h"
+#include "vec3.h"
 
 class Sphere : public Hittable {
   Point3 center;
@@ -12,8 +14,7 @@ public:
   Sphere(const Point3 &p, double radius)
       : center(p), radius(std::fmax(0, radius)) {}
 
-  bool hit(const Ray &r, double r_tmin, double r_tmax,
-           HitRecord &rec) const override {
+  bool hit(const Ray &r, Interval ray_t, HitRecord &rec) const override {
     Vec3 oc = center - r.origin();
     auto a = r.direction().mod_sq();
     // auto b = -2.0 * dot(r.direction(), oc);
@@ -28,9 +29,9 @@ public:
     auto sqrtd = std::sqrt(discriminant);
     auto root = (h - sqrtd) / a;
 
-    if (root <= r_tmin || r_tmax <= root) {
+    if (!ray_t.surrounds(root)) {
       root = (h + sqrtd) / a;
-      if (root <= r_tmin || r_tmax <= root)
+      if (!ray_t.surrounds(root))
         return false;
     }
 

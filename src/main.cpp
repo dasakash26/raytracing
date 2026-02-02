@@ -1,3 +1,4 @@
+#include "interval.h"
 #include "raytracing.h"
 
 #include "color.h"
@@ -9,7 +10,7 @@
 
 Color ray_color(const Ray &r, const Hittable &world) {
   HitRecord rec;
-  if (world.hit(r, 0.001, infinity, rec)) {
+  if (world.hit(r, Interval(0.001, infinity), rec)) {
     return (rec.normal + Color(1, 1, 1)) * 0.5;
   }
 
@@ -31,9 +32,8 @@ int main() {
   // world
   HittableList world;
 
-  world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.3));
-  world.add(make_shared<Sphere>(Point3(0.5, 0, -1), 0.3));
-  world.add(make_shared<Sphere>(Point3(0.25, 0.7, -1), 0.4));
+  world.add(make_shared<Sphere>(Point3(0, 0.5, -2), 1));
+  world.add(make_shared<Sphere>(Point3(0, 0, -1), 0.5));
   world.add(make_shared<Sphere>(Point3(0, -100.5, -1), 100));
 
   // Camera
