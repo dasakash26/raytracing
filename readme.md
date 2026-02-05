@@ -18,6 +18,6 @@ build/render > image.ppm
 Open `image.ppm` with any PPM-compatible image viewer.
 
 ## Output: Till now.
-![output](./public/image.png)
+![output](./public/sample.png)
 
 > Source : [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
