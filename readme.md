@@ -7,7 +7,7 @@ A minimal C++ project to understand ray tracing conceps.
 ```sh
 cmake -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build
-````
+```
 
 ## Run
 
@@ -17,5 +17,7 @@ build/render > image.ppm
 
 Open `image.ppm` with any PPM-compatible image viewer.
 
-> Source : [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+## Output: Till now.
+![output](./public/image.png)
 
+> Source : [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
