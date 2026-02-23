@@ -63,7 +63,7 @@ class Camera {
 
     HitRecord rec;
     if (world.hit(r, Interval(0.001, infinity), rec)) {
-      Vec3 dirn = rand_on_hemeisphere(rec.normal);
+      Vec3 dirn = rec.normal + rand_on_hemeisphere(rec.normal);
       // return (rec.normal + Color(1, 1, 1)) * 0.5;
       // recursive call to simulate bouncing light
       // base case: when ray misses the obj

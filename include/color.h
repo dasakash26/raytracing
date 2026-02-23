@@ -14,9 +14,9 @@ inline void write_color(std::ostream &out, const Color &pixel) {
   auto b = pixel.z();
 
   // gamma correction with gamma=2.0
-  // r = sqrt(r);
-  // g = sqrt(g);
-  // b = sqrt(b);
+  r = sqrt(r);
+  g = sqrt(g);
+  b = sqrt(b);
 
   static const Interval intensity(0.000, 0.9999);
 
