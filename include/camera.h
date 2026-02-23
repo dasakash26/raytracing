@@ -8,12 +8,14 @@
 #include <iostream>
 
 #define SQ_OFFSET 0.5
+#define ABSORBPTION 0.5
 
 class Camera {
   int img_h;
   Point3 center, px_00;    // center of: camera, Oth px
   Vec3 px_du, px_dv;       // Offset to px
   double px_samples_scale; // Color scale factor for a sum of pixel samples
+  int max_depth = 50;      // Max ray bounce depth
 
   void init() {
     img_h = int(img_w / aspect_ratio);
@@ -54,10 +56,18 @@ class Camera {
     return Vec3(rand_d() - SQ_OFFSET, rand_d() - SQ_OFFSET, 0);
   }
 
-  Color ray_color(const Ray &r, const Hittable &world) {
+  Color ray_color(const Ray &r, int depth, const Hittable &world) {
+    // lim ray bounce
+    if (depth <= 0)
+      return Color(0, 0, 0);
+
     HitRecord rec;
     if (world.hit(r, Interval(0.001, infinity), rec)) {
-      return (rec.normal + Color(1, 1, 1)) * 0.5;
+      Vec3 dirn = rand_on_hemeisphere(rec.normal);
+      // return (rec.normal + Color(1, 1, 1)) * 0.5;
+      // recursive call to simulate bouncing light
+      // base case: when ray misses the obj
+      return ABSORBPTION * ray_color(Ray(rec.p, dirn), depth - 1, world);
     }
 
     Vec3 unit_dir = unit_vec(r.direction());
@@ -87,7 +97,7 @@ public:
         Color px_clr(0, 0, 0);
         for (int s = 0; s < samples_p_px; ++s) {
           Ray r = get_ray(i, j);
-          px_clr += ray_color(r, world);
+          px_clr += ray_color(r, max_depth, world);
         }
 
         write_color(cout, px_clr * px_samples_scale);

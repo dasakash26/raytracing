@@ -1,8 +1,11 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include "raytracing.h"
 #include <cmath>
 #include <iostream>
+
+#define MIN_F (1e-160)
 
 class Vec3 {
 
@@ -40,6 +43,10 @@ public:
     return *this;
   }
   Vec3 &operator/=(double t) { return *this *= (1 / t); }
+
+  static Vec3 rand(double min = -1, double max = 1) {
+    return Vec3(rand_d(min, max), rand_d(min, max), rand_d(min, max));
+  }
 };
 
 using Point3 = Vec3;
@@ -80,5 +87,22 @@ inline Vec3 cross(const Vec3 &u, const Vec3 &v) {
 }
 
 inline Vec3 unit_vec(const Vec3 &v) { return v / v.mod(); }
+
+inline Vec3 rand_unit_vec() {
+  while (true) {
+    auto p = Vec3::rand(-1, 1);
+    auto len_sq = p.mod_sq();
+    if (MIN_F < len_sq && len_sq <= 1)
+      return p / sqrt(len_sq);
+  }
+}
+
+inline Vec3 rand_on_hemeisphere(const Vec3 &normal) {
+  Vec3 on_unit_sp = rand_unit_vec();
+  if (dot(normal, on_unit_sp) > 0.0)
+    return on_unit_sp;
+  else
+    return -on_unit_sp;
+}
 
 #endif // !VEC3_H
